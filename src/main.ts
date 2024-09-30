@@ -1,35 +1,39 @@
 let currentInput: string = '';
-let previousInput: string = ''; // Stores the last answer
-let storedAnswer: string = ''; // To store Ans value even after AC is pressed
+let previousInput: string = ''; // This is where the answer is being input
+let storedAnswer: string = ''; // This is where the previous_input is being stored
 let isCalculatorOn: boolean = false;
-let isDisplayingHello: boolean = false; // Flag to stop hello if input occurs
+let isDisplayingHello: boolean = false;
 let displayElement = document.querySelector('.screen_input') as HTMLElement;
 let previousDisplayElement = document.querySelector('.previous_input') as HTMLElement;
 let indicatorElement = document.querySelector('.status-indicator') as HTMLElement;
-const maxLength: number = 16;
 
-// Function to update the display
+const maxTotalLength: number = 16;
+const maxInputLength: number = 8;
+
 function updateDisplay() {
   if (!isCalculatorOn) return;
-  displayElement.innerText = currentInput.slice(0, maxLength);
+  
+  let formattedInput = currentInput.replace(/\s/g, '');
+  if (formattedInput.length > maxTotalLength) {
+    formattedInput = formattedInput.slice(0, maxTotalLength);
+  }
+  
+  displayElement.innerText = formattedInput;
   previousDisplayElement.innerText = previousInput;
 }
 
-// Update the on/off status indicator
 function updateIndicator() {
   indicatorElement.style.backgroundColor = isCalculatorOn ? 'green' : 'red';
 }
 
-// Clear function (AC) but keeps Ans stored
 function clearAll() {
   if (!isCalculatorOn) return;
-  currentInput = '';
   previousInput = '';
+  currentInput = '';
   displayElement.innerText = '';
   previousDisplayElement.innerText = '';
 }
 
-// Function to store answer in Ans and not remove after AC
 function handleAns() {
   if (isCalculatorOn && storedAnswer !== '') {
     currentInput += storedAnswer;
@@ -37,39 +41,36 @@ function handleAns() {
   }
 }
 
-// Handle digit input
 function inputDigit(digit: string) {
-  if (isCalculatorOn && !isDisplayingHello && currentInput.length < maxLength) {
-    currentInput += digit;
-    updateDisplay();
-    isDisplayingHello = false; // Stop Hello once input starts
+  if (isCalculatorOn && currentInput.replace(/\s/g, '').length < maxTotalLength) {
+    const lastValue = currentInput.split(/([+\-*/])/).pop() || '';
+    if (lastValue.length < maxInputLength) {
+      currentInput += digit;
+      updateDisplay();
+      isDisplayingHello = false;
+    }
   }
 }
 
-// Function to handle operator input
 function inputOperator(op: string) {
   if (isCalculatorOn && currentInput !== '') {
-    const lastChar = currentInput[currentInput.length - 1];
-    if (isOperator(lastChar)) {
-      currentInput = currentInput.slice(0, -1) + ` ${op} `;
-    } else {
+    const lastChar = currentInput.trim().slice(-1);
+    if (!isOperator(lastChar)) {
       currentInput += ` ${op} `;
+      updateDisplay();
     }
-    updateDisplay();
   }
 }
 
-// Helper function to check if the character is an operator
 function isOperator(char: string): boolean {
   return ['+', '-', '*', '/'].includes(char);
 }
 
-// Equals button
 function calculate() {
   if (isCalculatorOn && currentInput) {
     try {
       const result = eval(currentInput.replace(/x/g, '*'));
-      previousInput = `${result}`;
+      previousInput = `${result}`.slice(0, maxInputLength);
       storedAnswer = previousInput;
       currentInput = '';
       updateDisplay();
@@ -81,7 +82,6 @@ function calculate() {
   }
 }
 
-// Backspace function
 function backspace() {
   if (isCalculatorOn) {
     currentInput = currentInput.trim().slice(0, -1);
@@ -89,7 +89,6 @@ function backspace() {
   }
 }
 
-// Toggle calculator (Bye)
 function toggleCalculator() {
   if (isCalculatorOn) {
     displayGoodbye();
@@ -98,27 +97,24 @@ function toggleCalculator() {
   }
 }
 
-// AC button function
 function handleAC() {
   if (!isCalculatorOn) {
     isCalculatorOn = true;
-    // displayHello();
   }
   clearAll();
   updateIndicator();
 }
 
-// Display Goodbye animation
 function displayGoodbye() {
+  previousInput = '';
   displayElement.innerText = 'Goodbye!';
   setTimeout(() => {
+    previousDisplayElement.style.color = '#222'
     displayElement.innerText = '';
     clearAll();
-
   }, 1000);
 }
 
-// Display Hello (stops once input starts)
 function displayHello() {
   if (!isDisplayingHello) {
     const hellos = ['Hello!', 'Hola!', 'Kamusta!', 'Bonjour!', 'Hallo!', 'Ciao!'];
@@ -132,17 +128,19 @@ function displayHello() {
   }
 }
 
-// Decimal input (only allow once)
 function handleDecimal() {
-  if (isCalculatorOn && !currentInput.includes('.')) {
-    currentInput += '.';
-    updateDisplay();
+  if (isCalculatorOn) {
+    const lastValue = currentInput.split(/([+\-*/])/).pop() || '';
+    if (lastValue.length < maxInputLength && !lastValue.includes('.')) {
+      currentInput += '.';
+      updateDisplay();
+    }
   }
 }
 
 document.querySelector('.hello')?.addEventListener('click', () => {
   if (isCalculatorOn) {
-    displayHello(); // Call the displayHello function
+    displayHello();
   }
 });
 

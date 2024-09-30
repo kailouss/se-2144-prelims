@@ -3,9 +3,8 @@ body {
   justify-content: center;
 }
 
-/* General calculator styles */
 .calculator_body {
-  background-color: #666666;
+  background-color: #888;
   border: 1px solid black;
   border-radius: 5%;
   clip-path: inset(0 0 0 0 round 5%);
@@ -18,7 +17,6 @@ body {
   padding: 1%;
 }
 
-/* Screen Display (Previous and Current Input) */
 .screen_display {
   width: 90%;
   height: 100px;
@@ -34,9 +32,10 @@ body {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   justify-content: space-between;
   position: relative;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
-/* Previous Input (Top-right corner) */
 .previous_input {
   font-size: 1rem;
   color: #ccc;
@@ -44,7 +43,6 @@ body {
   margin-bottom: 5px;
 }
 
-/* Current Input (Main screen numbers) */
 .screen_input {
   font-size: 2rem;
   font-weight: bold;
@@ -53,15 +51,13 @@ body {
   overflow: hidden;
 }
 
-/* Keypad Styles */
 .keypad {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 5 columns */
+  grid-template-columns: repeat(5, 1fr);
   grid-gap: 5px;
   margin: 0 3%;
 }
 
-/* General button styles */
 .keys {
   background-color: #ddd;
   border: 1px solid rgb(110, 110, 110);
@@ -96,7 +92,6 @@ body {
   align-self: flex-end;
 };
 
-/* Different button colors for operators */
 .keys.operator {
   background-color: #f39c12;
   color: white;
@@ -120,43 +115,39 @@ body {
   color: white;
 }
 
-/* Special button styles for "Goodbye" (On/Off Button) */
 .keys.on-off {
   background-color: #2980b9;
   color: white;
   text-align: center;
 }
 
-/* Scientific notation button style */
 .keys.sci-notation {
   background-color: #16a085;
   color: white;
 }
 
-/* Button hover effect */
 .keys:hover {
   background-color: #bbb;
 }
 
-/* Responsive adjustments */
 @media (max-width: 480px) {
   .calculator_body {
-    width: 100%; /* Full width on mobile */
+    width: 100%;
     padding: 10px;
   }
 
   .screen_display, .keypad {
-    width: 100%; /* Full width on mobile */
+    width: 100%;
   }
 
   .keys {
-    padding: 15px; /* Adjust button padding on mobile */
+    padding: 15px;
     font-size: 1rem;
   }
 
   .keypad {
     width: 100%;
-    grid-template-columns: repeat(5, 1fr); /* Keep 5 columns in mobile */
+    grid-template-columns: repeat(5, 1fr);
   }
 
 }
