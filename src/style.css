@@ -1,0 +1,196 @@
+body {
+  display: flex;
+  justify-content: center;
+}
+
+/* General calculator styles */
+.calculator_body {
+  background-color: #666666;
+  border: 1px solid black;
+  border-radius: 5%;
+  clip-path: inset(0 0 0 0 round 5%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 90vh;
+  position: relative;
+  padding: 1%;
+}
+
+/* Screen Display (Previous and Current Input) */
+.screen_display {
+  width: 90%;
+  height: 100px;
+  background-color: #222;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  justify-content: space-between;
+  position: relative;
+}
+
+/* Previous Input (Top-right corner) */
+.previous_input {
+  font-size: 1rem;
+  color: #ccc;
+  align-self: flex-end;
+  margin-bottom: 5px;
+}
+
+/* Current Input (Main screen numbers) */
+.screen_input {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  text-align: right;
+  overflow: hidden;
+}
+
+/* Keypad Styles */
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 columns */
+  grid-gap: 5px;
+  margin: 0 3%;
+}
+
+/* General button styles */
+.keys {
+  background-color: #ddd;
+  border: 1px solid rgb(110, 110, 110);
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;  
+  transition: background-color 0.3s;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+.keys:active {
+  transform: scale(0.95);
+  box-shadow: none;
+}
+
+.keys.ans {
+  margin: 0 0 5% 0;
+  max-width: 20%;
+  max-height: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #414040;
+  color: white;
+  position: relative;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: flex-end;
+};
+
+/* Different button colors for operators */
+.keys.operator {
+  background-color: #f39c12;
+  color: white;
+}
+.keys.hello {
+  background-color: #27ae60;
+}
+
+.keys.equals {
+  background-color: #27ae60;
+  color: white;
+}
+
+.keys.ac {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.keys.backspace {
+  background-color: #8e44ad;
+  color: white;
+}
+
+/* Special button styles for "Goodbye" (On/Off Button) */
+.keys.on-off {
+  background-color: #2980b9;
+  color: white;
+  text-align: center;
+}
+
+/* Scientific notation button style */
+.keys.sci-notation {
+  background-color: #16a085;
+  color: white;
+}
+
+/* Button hover effect */
+.keys:hover {
+  background-color: #bbb;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .calculator_body {
+    width: 100%; /* Full width on mobile */
+    padding: 10px;
+  }
+
+  .screen_display, .keypad {
+    width: 100%; /* Full width on mobile */
+  }
+
+  .keys {
+    padding: 15px; /* Adjust button padding on mobile */
+    font-size: 1rem;
+  }
+
+  .keypad {
+    width: 100%;
+    grid-template-columns: repeat(5, 1fr); /* Keep 5 columns in mobile */
+  }
+
+}
+
+.status-indicator {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: red; /* Default to off */
+  transition: background-color 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
+
+.fade-out {
+  animation: fadeOut 1s ease-in-out;
+}
+
+/* Ensure text stays visible during animation */
+.screen_input {
+  min-height: 2.5em; /* To prevent layout shifts during text animations */
+}

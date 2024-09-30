@@ -1,0 +1,38 @@
+.calculator_body {
+/* this is the whole div of the calculaltor */
+  display: flex;
+}
+
+.screen_display {
+/* this is the main div of the screen input and previous input */
+
+}
+
+.screen_input {
+/* this is where the numbers will be displayed */
+
+}
+
+.previous_input { 
+/* this is located on the upper right corner of the screen display */
+
+}
+
+.keypad {
+/* this is the dv of the whole keys */
+}
+
+.keys {
+/* 16 keys overall */
+}
+
+
+// Function to display "Goodbye!" with animation
+function displayGoodbye() {
+  displayElement.innerText = 'Goodbye!'; // Show Goodbye on the display
+  isDisplayingHello = true; // Prevent further input
+  setTimeout(() => {
+    clearAll(); // Clear the display after 1 second
+    isDisplayingHello = false; // Allow new inputs after the display is cleared
+  }, 1000); // Delay the clearAll function for 1 second
+}
