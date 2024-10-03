@@ -1,3 +1,5 @@
+// import { inputOperator, cycleOperator, toggleNegative,  } from "./components/negative";
+
 let currentInput: string = '';
 let previousInput: string = ''; // This is where the answer is being input
 let storedAnswer: string = ''; // This is where the previous_input is being stored
@@ -7,7 +9,7 @@ let displayElement = document.querySelector('.screen_input') as HTMLElement;
 let previousDisplayElement = document.querySelector('.previous_input') as HTMLElement;
 let indicatorElement = document.querySelector('.status-indicator') as HTMLElement;
 
-const maxTotalLength: number = 16;
+const maxTotalLength: number = 17;
 const maxInputLength: number = 8;
 
 function updateDisplay() {
@@ -52,28 +54,62 @@ function inputDigit(digit: string) {
   }
 }
 
-function inputOperator(op: string) {
-  if (isCalculatorOn && currentInput !== '') {
-    const lastChar = currentInput.trim().slice(-1);
-    if (!isOperator(lastChar)) {
-      currentInput += ` ${op} `;
-      updateDisplay();
-    }
-  }
-}
-
 function isOperator(char: string): boolean {
   return ['+', '-', '*', '/'].includes(char);
 }
 
+export function inputOperator(op: string) {
+  if (isCalculatorOn) {
+    const trimmedInput = currentInput.trim();
+    const lastChar = trimmedInput.slice(-1);
+
+    // Allow "-" as the first character for negative numbers
+    if (trimmedInput === '' && op === '-') {
+      currentInput += `-`;
+      updateDisplay();
+      return;
+    }
+
+    // Handle "1-(-1" to allow valid nested negative numbers
+    if (lastChar === '-' && op === '-') {
+      currentInput += `-`;
+      updateDisplay();
+      return;
+    }
+
+    // Handle operators after a number or another operator, e.g., "1*-1" or "1/-1"
+    if (isOperator(lastChar) && op === '-') {
+      currentInput += `-`;
+      updateDisplay();
+      return;
+    }
+
+    // Regular operator input
+    currentInput += ` ${op} `;
+    updateDisplay();
+  }
+}
+
+
 function calculate() {
   if (isCalculatorOn && currentInput) {
     try {
+      const divisionByZero = /\/\s*0(\|$)/.test(currentInput);
+      if (divisionByZero) {
+        currentInput = 'Error';
+        updateDisplay();
+        currentInput = '';
+        return;
+      }
       const result = eval(currentInput.replace(/x/g, '*'));
-      previousInput = `${result}`.slice(0, maxInputLength);
-      storedAnswer = previousInput;
-      currentInput = '';
+      if (result === Infinity || isNaN(result)){
+        currentInput = 'Error';
+      } else {
+        previousInput = `${result}`.slice(0, maxInputLength);
+        storedAnswer = previousInput;
+      }
       updateDisplay();
+      currentInput = ''
     } catch (e) {
       currentInput = 'Error';
       updateDisplay();
@@ -138,6 +174,38 @@ function handleDecimal() {
   }
 }
 
+
+// New function to handle the toggle of positive and negative signs
+export function toggleNegative() {
+  if (isCalculatorOn && currentInput !== '') {
+    const lastValue = currentInput.split(/([+\-*/])/).pop() || '';
+    if (lastValue.startsWith('(-')) {
+      // Remove negative if already applied
+      currentInput = currentInput.replace('(-', '');
+    } else if (currentInput === '' || lastValue !== '') {
+      // Add negative sign before number
+      currentInput += '(-';
+    }
+    updateDisplay();
+  }
+}
+
+// Helper function to cycle through operator signs on repeated clicks
+export function cycleOperator() {
+  const lastChar = currentInput.trim().slice(-1);
+  const operators = ['+', '-', '*', '/'];
+
+  if (isOperator(lastChar)) {
+    let currentIndex = operators.indexOf(lastChar);
+    currentIndex = (currentIndex + 1) % operators.length;
+    currentInput = currentInput.slice(0, -1) + operators[currentIndex];
+    updateDisplay();
+  }
+}
+
+// Additional feature suggestions: Operator cycling (cycle through +, -, *, / on repeat clicks)
+document.querySelector('.operator')?.addEventListener('dblclick', cycleOperator);
+
 document.querySelector('.hello')?.addEventListener('click', () => {
   if (isCalculatorOn) {
     displayHello();
@@ -155,6 +223,6 @@ document.querySelectorAll('.operator').forEach(button => {
 document.querySelector('.equals')?.addEventListener('click', calculate);
 document.querySelector('.backspace')?.addEventListener('click', backspace);
 document.querySelector('.ac')?.addEventListener('click', handleAC);
-document.querySelector('.on-off')?.addEventListener('click', toggleCalculator);
+document.querySelector('.off')?.addEventListener('click', toggleCalculator);
 document.querySelector('.ans')?.addEventListener('click', handleAns);
 document.querySelector('.decimal')?.addEventListener('click', handleDecimal);
