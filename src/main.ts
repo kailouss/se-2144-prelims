@@ -1,3 +1,4 @@
+import { specialInputs } from "./components/specialInputs";
 let currentInput: string = '';
 let previousInput: string = ''; // This is where the answer is being input
 let storedAnswer: string = ''; // This is where the previous_input is being stored
@@ -86,6 +87,13 @@ export function inputOperator(op: string) {
 
 function calculate() {
   if (isCalculatorOn && currentInput) {
+    const specialDigits = specialInputs(currentInput);
+    if (specialDigits) {
+      currentInput = specialDigits;
+      updateDisplay();
+      currentInput = ''
+      return;
+    }
     try {
       const divisionByZero = /\/\s*0(\|$)/.test(currentInput);
       if (divisionByZero) {
@@ -101,6 +109,7 @@ function calculate() {
         previousInput = `${result}`.slice(0, maxInputLength);
         storedAnswer = previousInput;
       }
+
       updateDisplay();
       currentInput = ''
     } catch (e) {
