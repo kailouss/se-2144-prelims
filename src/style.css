@@ -55,6 +55,7 @@ body {
   color: #fff;
   text-align: right;
   overflow: hidden;
+  margin-bottom: 0;
 }
 
 .keypad {
@@ -90,12 +91,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #414040;
   color: white;
   position: relative;
   border-radius: 5px;
   cursor: pointer;
   align-self: flex-end;
+  border: none;
+  background: rgba(61, 61, 61, 0.1);
 }
 
 .keys.operator {
@@ -187,5 +189,5 @@ s
 }
 
 .screen_input {
-  min-height: 2.5em;
+  min-height: 1.5em;
 }
