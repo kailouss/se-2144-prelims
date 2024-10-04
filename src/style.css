@@ -96,7 +96,7 @@ body {
   border-radius: 5px;
   cursor: pointer;
   align-self: flex-end;
-};
+}
 
 .keys.operator {
   font-weight: bold;
@@ -164,7 +164,7 @@ s
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: red; /* Default to off */
+  background-color: red;
   transition: background-color 0.3s ease;
 }
 
@@ -186,7 +186,6 @@ s
   animation: fadeOut 1s ease-in-out;
 }
 
-/* Ensure text stays visible during animation */
 .screen_input {
-  min-height: 2.5em; /* To prevent layout shifts during text animations */
+  min-height: 2.5em;
 }

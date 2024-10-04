@@ -1,5 +1,3 @@
-// import { inputOperator, cycleOperator, toggleNegative,  } from "./components/negative";
-
 let currentInput: string = '';
 let previousInput: string = ''; // This is where the answer is being input
 let storedAnswer: string = ''; // This is where the previous_input is being stored
@@ -62,29 +60,24 @@ export function inputOperator(op: string) {
   if (isCalculatorOn) {
     const trimmedInput = currentInput.trim();
     const lastChar = trimmedInput.slice(-1);
-
-    // Allow "-" as the first character for negative numbers
     if (trimmedInput === '' && op === '-') {
       currentInput += `-`;
       updateDisplay();
       return;
     }
 
-    // Handle "1-(-1" to allow valid nested negative numbers
     if (lastChar === '-' && op === '-') {
       currentInput += `-`;
       updateDisplay();
       return;
     }
 
-    // Handle operators after a number or another operator, e.g., "1*-1" or "1/-1"
     if (isOperator(lastChar) && op === '-') {
       currentInput += `-`;
       updateDisplay();
       return;
     }
 
-    // Regular operator input
     currentInput += ` ${op} `;
     updateDisplay();
   }
@@ -175,22 +168,18 @@ function handleDecimal() {
 }
 
 
-// New function to handle the toggle of positive and negative signs
 export function toggleNegative() {
   if (isCalculatorOn && currentInput !== '') {
     const lastValue = currentInput.split(/([+\-*/])/).pop() || '';
     if (lastValue.startsWith('(-')) {
-      // Remove negative if already applied
       currentInput = currentInput.replace('(-', '');
     } else if (currentInput === '' || lastValue !== '') {
-      // Add negative sign before number
       currentInput += '(-';
     }
     updateDisplay();
   }
 }
 
-// Helper function to cycle through operator signs on repeated clicks
 export function cycleOperator() {
   const lastChar = currentInput.trim().slice(-1);
   const operators = ['+', '-', '*', '/'];
@@ -203,7 +192,6 @@ export function cycleOperator() {
   }
 }
 
-// Additional feature suggestions: Operator cycling (cycle through +, -, *, / on repeat clicks)
 document.querySelector('.operator')?.addEventListener('dblclick', cycleOperator);
 
 document.querySelector('.hello')?.addEventListener('click', () => {
